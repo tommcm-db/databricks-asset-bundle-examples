@@ -1,0 +1,56 @@
+bundle:
+  name: mlflow
+
+workspace:
+  host: https://e2-dogfood.staging.cloud.databricks.com/
+
+targets:
+  development:
+    default: true
+
+resources:
+  models:
+    my_model:
+      name: "${bundle.environment}-bundle-model-name"
+      description: |
+        ## This is a title
+
+        I'm trying to use some Markdown:
+        * Bullet 1
+        * **Bullet 2**
+        * _Bullet 3_
+
+      permissions:
+        - level: CAN_READ
+          group_name: users
+
+  experiments:
+    my_experiment:
+      name: "${workspace.root_path}/my_experiment"
+
+      permissions:
+        - level: CAN_READ
+          group_name: users
+
+  jobs:
+    run_experiment:
+      name: "[${bundle.environment}] Run experiment"
+      tasks:
+        - task_key: shark_sightings
+          notebook_task:
+            base_parameters:
+              experiment_name: "${workspace.root_path}/my_experiment"
+              model_name: "${resources.models.my_model.name}"
+            notebook_path: ./LogRunsToExperiment.py
+
+          # A shared ML cluster on e2-dogfood
+          existing_cluster_id: 0629-224433-y0uwez1n
+
+          # new_cluster:
+          #   spark_version: 10.4.x-scala2.12
+          #   num_workers: 1
+          #   node_type_id: i3.xlarge
+
+      permissions:
+        - level: CAN_VIEW
+          group_name: users
