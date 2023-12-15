@@ -1,6 +1,10 @@
 In order to test the model-serving-endpoint bundle, follow the steps below:
+
+
     1. Deploy the bundle inside of `prerequisite_bundle`.
     2. Run the `"[${bundle.environment}] Run experiment"` job created by the bundle that runs the `LogRunsToExperiment.py` notebook.
     3. Deploy the bundle inside of `main_bundle`.
+
+
 The prerequisite bundle and job need to be run before deploying the model-serving-endpoint bundle because a model serving endpoint
 cannot be created without a model version. The prerequisite bundle and job create this model version that can be deployed with the endpoint.
